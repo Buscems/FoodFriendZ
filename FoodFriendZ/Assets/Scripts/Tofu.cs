@@ -4,7 +4,7 @@ using UnityEngine;
 using Rewired;
 using Rewired.ControllerExtensions;
 
-public class PlayerMovement : MonoBehaviour
+public class Tofu : MonoBehaviour
 {
 
     //the following is in order to use rewired
@@ -14,27 +14,22 @@ public class PlayerMovement : MonoBehaviour
     [Tooltip("Number identifier for each player, must be above 0")]
     public int playerNum;
 
-    [Header("Movement Variables")]
-    public float speed;
-    public Vector3 velocity;
-    Vector3 direction;
-    Rigidbody2D rb;
+    [Header("Attack Variables")]
+    public GameObject sword;
 
     private void Awake()
     {
-
         //Rewired Code
         myPlayer = ReInput.players.GetPlayer(playerNum - 1);
         ReInput.ControllerConnectedEvent += OnControllerConnected;
         CheckController(myPlayer);
-
     }
 
     // Start is called before the first frame update
     void Start()
     {
 
-        rb = GetComponent<Rigidbody2D>();
+        sword.SetActive(false);
 
     }
 
@@ -42,11 +37,10 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
 
-        //movement for players
-        velocity.x = myPlayer.GetAxisRaw("Horizontal") * speed;
-        velocity.y = myPlayer.GetAxisRaw("Vertical") * speed;
-
-        rb.MovePosition(transform.position + velocity * Time.deltaTime);
+        if (myPlayer.GetButtonDown("Attack"))
+        {
+            sword.SetActive(true);
+        }
 
     }
 
