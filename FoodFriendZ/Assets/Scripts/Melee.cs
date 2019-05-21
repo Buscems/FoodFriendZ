@@ -4,7 +4,7 @@ using UnityEngine;
 using Rewired;
 using Rewired.ControllerExtensions;
 
-public class PlayerMovement : MonoBehaviour
+public class Melee : MonoBehaviour
 {
 
     //the following is in order to use rewired
@@ -14,39 +14,62 @@ public class PlayerMovement : MonoBehaviour
     [Tooltip("Number identifier for each player, must be above 0")]
     public int playerNum;
 
-    [Header("Movement Variables")]
-    public float speed;
-    public Vector3 velocity;
-    Vector3 direction;
-    Rigidbody2D rb;
+    [Header("Attack Variables")]
+    public GameObject sword;
+    public bool attacking;
+    public Vector3 direction;
+    public float offset;
+
+    [Header("Script References")]
+    [Tooltip("This is the reference for the main character controller that controls movement")]
+    public PlayerMovement pm;
 
     private void Awake()
     {
-
         //Rewired Code
         myPlayer = ReInput.players.GetPlayer(playerNum - 1);
         ReInput.ControllerConnectedEvent += OnControllerConnected;
         CheckController(myPlayer);
-
     }
 
     // Start is called before the first frame update
     void Start()
     {
 
-        rb = GetComponent<Rigidbody2D>();
-        
+        pm = this.GetComponent<PlayerMovement>();
+        sword.SetActive(false);
+
     }
 
     // Update is called once per frame
     void Update()
     {
 
-        //movement for players
-        velocity.x = myPlayer.GetAxisRaw("MoveHorizontal") * speed;
-        velocity.y = myPlayer.GetAxisRaw("MoveVertical") * speed;
+        //keeping track of the direction of the player
+        this.direction = pm.velocity;
 
-        rb.MovePosition(transform.position + velocity * Time.deltaTime);
+        //melee attack
+        if (myPlayer.GetButtonDown("Attack") && !attacking)
+        {
+
+            Attack();
+
+        }
+
+    }
+    void Attack()
+    {
+        attacking = true;
+        sword.SetActive(true);
+        //this will have the sword spawn where the player is facing + a certain distance away
+        sword.transform.position = this.transform.position + direction * offset;
+    }
+
+    void EndAttack()
+    {
+        
+        sword.SetActive(false);
+        attacking = false;
 
     }
 

@@ -535,6 +535,7 @@ GameObject:
   - component: {fileID: 1499699921}
   - component: {fileID: 1499699920}
   - component: {fileID: 1499699922}
+  - component: {fileID: 1499699923}
   m_Layer: 0
   m_Name: Tofu
   m_TagString: Untagged
@@ -686,6 +687,27 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1499699923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1499699916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e92c23c724916ce4483b1352e4b5d451, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerNum: 1
+  sword: {fileID: 1619702706}
+  attacking: 0
+  direction: {x: 0, y: 0, z: 0}
+  offset: 0
+  pm: {fileID: 0}
+  attackDamage: 0
+  attackSpeed: 0
+  moveSpeed: 0
 --- !u!1 &1619702706
 GameObject:
   m_ObjectHideFlags: 0
