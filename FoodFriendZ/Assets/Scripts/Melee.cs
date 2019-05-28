@@ -51,16 +51,20 @@ public class Melee : MonoBehaviour
         //melee attack
         if (myPlayer.GetButtonDown("Attack") && !attacking)
         {
-
-            Attack();
-
+            /*states for the blend tree:
+             * 0 = Idle
+             * .5 = Idle and Attacking
+             * 1 = Attack
+             * 1.5 = Attacking and moving
+             * 2 = Move
+            */
+            pm.anim.SetFloat("State", 1);
         }
 
     }
     void Attack()
     {
         attacking = true;
-        sword.SetActive(true);
         //this will have the sword spawn where the player is facing + a certain distance away
         sword.transform.position = this.transform.position + direction * offset;
     }

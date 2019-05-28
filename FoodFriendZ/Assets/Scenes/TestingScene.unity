@@ -558,6 +558,8 @@ MonoBehaviour:
   playerNum: 1
   speed: 10
   velocity: {x: 0, y: 0, z: 0}
+  moving: 0
+  anim: {fileID: 0}
 --- !u!212 &1499699918
 SpriteRenderer:
   m_ObjectHideFlags: 0
