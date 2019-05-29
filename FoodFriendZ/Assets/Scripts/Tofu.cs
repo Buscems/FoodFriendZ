@@ -13,13 +13,14 @@ public class Tofu : Melee
     // Start is called before the first frame update
     void Start()
     {
-        
+        MeleeStart();
+        pm.speed = moveSpeed;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        MeleeUpdate();
     }
 
 }

@@ -15,6 +15,7 @@ public class PlayerMovement : MonoBehaviour
     public int playerNum;
 
     [Header("Movement Variables")]
+    [HideInInspector]
     public float speed;
     public Vector3 velocity;
     public bool moving;
@@ -55,7 +56,7 @@ public class PlayerMovement : MonoBehaviour
         {
             moving = true;
             //this tells the blend tree to change to that animation instead of idle using floats to switch animations from the same animation state
-            anim.SetFloat("State", 2);
+            anim.SetFloat("State", 1);
         }
         else if(velocity.x == 0 && velocity.y == 0)
         {

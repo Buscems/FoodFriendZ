@@ -33,16 +33,17 @@ public class Melee : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    public void MeleeStart()
     {
 
         pm = this.GetComponent<PlayerMovement>();
+        Debug.Log("Yer");
         sword.SetActive(false);
 
     }
 
     // Update is called once per frame
-    void Update()
+    public void MeleeUpdate()
     {
 
         //keeping track of the direction of the player
@@ -51,15 +52,11 @@ public class Melee : MonoBehaviour
         //melee attack
         if (myPlayer.GetButtonDown("Attack") && !attacking)
         {
-            /*states for the blend tree:
-             * 0 = Idle
-             * .5 = Idle and Attacking
-             * 1 = Attack
-             * 1.5 = Attacking and moving
-             * 2 = Move
-            */
-            pm.anim.SetFloat("State", 1);
+            
         }
+
+        
+
 
     }
     void Attack()
