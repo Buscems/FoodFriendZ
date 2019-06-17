@@ -32,9 +32,12 @@ public class MapManager : MonoBehaviour
 
     public void UpdateVariables(int arrayPos, GameObject room)
     {
-        roomManager[arrayPos] = room;
-        roomName[arrayPos] = roomManager[arrayPos].name;
-        print(roomName[arrayPos] = roomManager[arrayPos].name);
-        roomPosition[arrayPos] = roomManager[arrayPos].transform.position;
+        try
+        {
+            roomManager[arrayPos] = room;
+            roomName[arrayPos] = roomManager[arrayPos].name;
+            roomPosition[arrayPos] = roomManager[arrayPos].transform.position;
+        }
+        catch { }
     }
 }

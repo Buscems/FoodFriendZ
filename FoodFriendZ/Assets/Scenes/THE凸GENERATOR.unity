@@ -19883,7 +19883,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3933e1f1d776c654fba0a5177751cb97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_numRooms: 8
+  m_numRooms: 20
   m_upDoors:
   - {fileID: 6946978740267156899, guid: b2a482f70e8399b4fbe1c51d7a22f8ea, type: 3}
   - {fileID: 5583155426906642131, guid: 50dcba4d23414714a92ac3cdfa9f98cf, type: 3}
