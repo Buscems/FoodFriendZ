@@ -35,17 +35,45 @@ public class MapGeneration : MonoBehaviour
 
     private bool mapGenerated = false;
     string infLoopMonitor = "Start";
+    bool shutDoors = false;
+    private GameObject[] allRooms;
+    private bool checkForOpenDoors = true;
     #endregion Private Variables
 
 
     // Start is called before the first frame update
     void Start()
     {
+        allRooms = new GameObject[m_upDoors.Length + m_downDoors.Length + m_leftDoors.Length + m_rightDoors.Length];
+
+        int allRoomsCounter = 0;
+
+        for (int i = 0; i < m_upDoors.Length; i++)
+        {
+            allRooms[allRoomsCounter] = m_upDoors[i];
+            allRoomsCounter++;
+        }
+        for (int i = 0; i < m_downDoors.Length; i++)
+        {
+            allRooms[allRoomsCounter] = m_downDoors[i];
+            allRoomsCounter++;
+        }
+        for (int i = 0; i < m_leftDoors.Length; i++)
+        {
+            allRooms[allRoomsCounter] = m_leftDoors[i];
+            allRoomsCounter++;
+        }
+        for (int i = 0; i < m_rightDoors.Length; i++)
+        {
+            allRooms[allRoomsCounter] = m_rightDoors[i];
+            allRoomsCounter++;
+        }
+
         mapManager = GetComponent<MapManager>();
         mapManager.Initialize(m_numRooms);
 
 
-        GameObject roomToBeAdded = Instantiate(GetRandomRoom(0), new Vector2(0,0), Quaternion.identity);
+        GameObject roomToBeAdded = Instantiate(GetRandomRoom(0), new Vector2(0, 0), Quaternion.identity);
         mapManager.UpdateVariables(roomTracker, roomToBeAdded);
         roomTracker += 1;
     }
@@ -53,19 +81,6 @@ public class MapGeneration : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //"Start"-> beginning of new while
-        //"Pass" -> made new room in last pass
-        //"Reset"-> the loop is going through infinitely, change a room
-        /*
-     
-
-        while (roomTracker < m_numRooms)
-        {
-            if (infLoopMonitor == "Pass")
-            {
-                infLoopMonitor = "Start";
-            }
-            */
         if (roomTracker < m_numRooms)
         {
             if (infLoopMonitor == "Start")
@@ -80,7 +95,7 @@ public class MapGeneration : MonoBehaviour
                         int randNum = (int)Random.Range(0, 3);
                         if (randNum == 0)
                         {
-                            if (CheckIfRoomExists(i, 0) == false)
+                            if (CheckIfRoomExists(i, 0) == false && roomTracker != m_numRooms)
                             {
                                 GameObject roomToBeAdded = Instantiate(GetDownRoom(), new Vector2(mapManager.roomPosition[i].x, mapManager.roomPosition[i].y + 10), Quaternion.identity);
                                 mapManager.UpdateVariables(roomTracker, roomToBeAdded);
@@ -99,7 +114,7 @@ public class MapGeneration : MonoBehaviour
                         int randNum = (int)Random.Range(0, 3);
                         if (randNum == 0)
                         {
-                            if (CheckIfRoomExists(i, 1) == false)
+                            if (CheckIfRoomExists(i, 1) == false && roomTracker != m_numRooms)
                             {
                                 GameObject roomToBeAdded = Instantiate(GetUpRoom(), new Vector2(mapManager.roomPosition[i].x, mapManager.roomPosition[i].y - 10), Quaternion.identity);
                                 mapManager.UpdateVariables(roomTracker, roomToBeAdded);
@@ -118,7 +133,7 @@ public class MapGeneration : MonoBehaviour
                         int randNum = (int)Random.Range(0, 3);
                         if (randNum == 0)
                         {
-                            if (CheckIfRoomExists(i, 2) == false)
+                            if (CheckIfRoomExists(i, 2) == false && roomTracker != m_numRooms)
                             {
                                 GameObject roomToBeAdded = Instantiate(GetRightRoom(), new Vector2(mapManager.roomPosition[i].x - 18, mapManager.roomPosition[i].y), Quaternion.identity);
                                 mapManager.UpdateVariables(roomTracker, roomToBeAdded);
@@ -137,7 +152,7 @@ public class MapGeneration : MonoBehaviour
                         int randNum = (int)Random.Range(0, 3);
                         if (randNum == 0)
                         {
-                            if (CheckIfRoomExists(i, 3) == false)
+                            if (CheckIfRoomExists(i, 3) == false && roomTracker != m_numRooms)
                             {
                                 GameObject roomToBeAdded = Instantiate(GetLeftRoom(), new Vector2(mapManager.roomPosition[i].x + 18, mapManager.roomPosition[i].y), Quaternion.identity);
                                 mapManager.UpdateVariables(roomTracker, roomToBeAdded);
@@ -151,27 +166,417 @@ public class MapGeneration : MonoBehaviour
                         }
                     }
                 }
-
-
-            }else if (infLoopMonitor != "Start")
+            }
+            else if (infLoopMonitor != "Start")
             {
-                print("newDooe");
                 ChangeExistingDoor();
                 infLoopMonitor = "Start";
             }
         }
 
-        /*
+        if (roomTracker == m_numRooms)
+        {
+            for (int i = 0; i < m_numRooms; i++)
+            {
+                CloseDoors(i);
+                FixOneWayDoors(i);
+            }
         }
 
-    }
-    */
 
 
     }
 
 
     #region Get Room Functions
+
+    private void FixOneWayDoors(int arrayNum)
+    {
+        if (mapManager.roomName[arrayNum].Contains("UP"))
+        {
+            FindIfWall(arrayNum, 0);
+        }
+
+        if (mapManager.roomName[arrayNum].Contains("DOWN"))
+        {
+            FindIfWall(arrayNum, 1);
+        }
+
+        if (mapManager.roomName[arrayNum].Contains("LEFT"))
+        {
+            FindIfWall(arrayNum, 2);
+        }
+
+        if (mapManager.roomName[arrayNum].Contains("RIGHT"))
+        {
+            FindIfWall(arrayNum, 3);
+        }
+    }
+
+    private int FindIfWall(int arrayNum, int direction)
+    {
+        Vector2 findRoomHere;
+        int randNum;
+        string roomName;
+
+        switch (direction)
+        {
+            case 0:
+                findRoomHere = new Vector2(mapManager.roomPosition[arrayNum].x, mapManager.roomPosition[arrayNum].y + 10);
+                for (int i = 0; i < m_numRooms; i++)
+                {
+                    if(mapManager.roomPosition[i] == findRoomHere)
+                    {
+                        roomName = mapManager.roomName[i];
+                        if (roomName.Contains("DOWN") == false)
+                        {
+                            randNum = Random.Range(0, 2);
+                            if(randNum == 0)
+                            {
+                                roomName = InsertWord("DOWN", i);
+                                for(int k = 0; k < allRooms.Length; k++)
+                                {
+                                    if (allRooms[k].name == roomName)
+                                    {
+                                        print(allRooms[k].name);
+                                        Destroy(mapManager.roomManager[i]);
+                                        GameObject newRoom = Instantiate(allRooms[k], mapManager.roomPosition[i], Quaternion.identity);
+                                        mapManager.UpdateVariables(i, newRoom);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                roomName = RemoveWord("UP", arrayNum);
+                                for (int k = 0; k < allRooms.Length; k++)
+                                {
+                                    if (allRooms[k].name == roomName)
+                                    {
+                                        print(allRooms[k].name);
+                                        Destroy(mapManager.roomManager[arrayNum]);
+                                        GameObject newRoom = Instantiate(allRooms[k], mapManager.roomPosition[arrayNum], Quaternion.identity);
+                                        mapManager.UpdateVariables(arrayNum, newRoom);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+
+            case 1:
+                findRoomHere = new Vector2(mapManager.roomPosition[arrayNum].x, mapManager.roomPosition[arrayNum].y - 10);
+                for (int i = 0; i < m_numRooms; i++)
+                {
+                    if (mapManager.roomPosition[i] == findRoomHere)
+                    {
+                        roomName = mapManager.roomName[i];
+                        if (roomName.Contains("UP") == false)
+                        {
+                            randNum = Random.Range(0, 2);
+                            if (randNum == 0)
+                            {
+                                roomName = InsertWord("UP", i);
+                                for (int k = 0; k < allRooms.Length; k++)
+                                {
+                                    if (allRooms[k].name == roomName)
+                                    {
+                                        print(allRooms[k].name);
+                                        Destroy(mapManager.roomManager[i]);
+                                        GameObject newRoom = Instantiate(allRooms[k], mapManager.roomPosition[i], Quaternion.identity);
+                                        mapManager.UpdateVariables(i, newRoom);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                roomName = RemoveWord("DOWN", arrayNum);
+                                for (int k = 0; k < allRooms.Length; k++)
+                                {
+                                    if (allRooms[k].name == roomName)
+                                    {
+                                        print(allRooms[k].name);
+                                        Destroy(mapManager.roomManager[arrayNum]);
+                                        GameObject newRoom = Instantiate(allRooms[k], mapManager.roomPosition[arrayNum], Quaternion.identity);
+                                        mapManager.UpdateVariables(arrayNum, newRoom);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+
+            case 2:
+                findRoomHere = new Vector2(mapManager.roomPosition[arrayNum].x - 18, mapManager.roomPosition[arrayNum].y);
+                for (int i = 0; i < m_numRooms; i++)
+                {
+                    if (mapManager.roomPosition[i] == findRoomHere)
+                    {
+                        roomName = mapManager.roomName[i];
+                        if (roomName.Contains("RIGHT") == false)
+                        {
+                            randNum = Random.Range(0, 2);
+                            if (randNum == 0)
+                            {
+                                roomName = InsertWord("RIGHT", i);
+                                for (int k = 0; k < allRooms.Length; k++)
+                                {
+                                    if (allRooms[k].name == roomName)
+                                    {
+                                        print(allRooms[k].name);
+                                        Destroy(mapManager.roomManager[i]);
+                                        GameObject newRoom = Instantiate(allRooms[k], mapManager.roomPosition[i], Quaternion.identity);
+                                        mapManager.UpdateVariables(i, newRoom);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                roomName = RemoveWord("LEFT", arrayNum);
+                                for (int k = 0; k < allRooms.Length; k++)
+                                {
+                                    if (allRooms[k].name == roomName)
+                                    {
+                                        print(allRooms[k].name);
+                                        Destroy(mapManager.roomManager[arrayNum]);
+                                        GameObject newRoom = Instantiate(allRooms[k], mapManager.roomPosition[arrayNum], Quaternion.identity);
+                                        mapManager.UpdateVariables(arrayNum, newRoom);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+
+            case 3:
+                findRoomHere = new Vector2(mapManager.roomPosition[arrayNum].x + 18, mapManager.roomPosition[arrayNum].y);
+                for (int i = 0; i < m_numRooms; i++)
+                {
+                    if (mapManager.roomPosition[i] == findRoomHere)
+                    {
+                        roomName = mapManager.roomName[i];
+                        if (roomName.Contains("LEFT") == false)
+                        {
+                            randNum = Random.Range(0, 2);
+                            if (randNum == 0)
+                            {
+                                roomName = InsertWord("LEFT", i);
+                                for (int k = 0; k < allRooms.Length; k++)
+                                {
+                                    if (allRooms[k].name == roomName)
+                                    {
+                                        print("rn"+roomName);
+                                        print("al"+allRooms[k].name);
+                                        Destroy(mapManager.roomManager[i]);
+                                        GameObject newRoom = Instantiate(allRooms[k], mapManager.roomPosition[i], Quaternion.identity);
+                                        mapManager.UpdateVariables(i, newRoom);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                roomName = RemoveWord("RIGHT", arrayNum);
+                                for (int k = 0; k < allRooms.Length; k++)
+                                {
+                                    if (allRooms[k].name == roomName)
+                                    {
+                                        print(allRooms[k].name);
+                                        Destroy(mapManager.roomManager[arrayNum]);
+                                        GameObject newRoom = Instantiate(allRooms[k], mapManager.roomPosition[arrayNum], Quaternion.identity);
+                                        mapManager.UpdateVariables(arrayNum, newRoom);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+        }
+
+
+        return 0;
+    }
+
+    private string InsertWord(string word, int arrayPos)
+    {
+        bool hasUp = false;
+        bool hasDown = false;
+        bool hasLeft = false;
+        bool hasRight = false;
+
+        string roomName = mapManager.roomName[arrayPos];
+
+        if (roomName.Contains("UP"))
+        {
+            hasUp = true;
+        }
+        if (roomName.Contains("DOWN"))
+        {
+            hasDown = true;
+        }
+        if (roomName.Contains("LEFT"))
+        {
+            hasLeft = true;
+        }
+        if (roomName.Contains("RIGHT"))
+        {
+            hasRight = true;
+        }
+
+
+        if (word == "UP") {
+            if (!hasUp)
+            {
+                roomName = "_UP" + roomName;
+            }
+            roomName = roomName.Replace("(Clone)", "");
+            return roomName;
+        }
+
+        if (word == "DOWN") {
+            int lettersIn1 = 0;
+            if (hasUp)
+            {
+                lettersIn1 += 3;
+            }
+            if (hasDown)
+            {
+                roomName = roomName.Insert(lettersIn1, "_DOWN");
+            }
+            roomName = roomName.Replace("(Clone)", "");
+            return roomName;
+        }
+
+        if (word == "LEFT") {
+            int lettersIn2 = 0;
+            if (hasUp)
+            {
+                lettersIn2 += 3;
+            }
+            if (hasDown)
+            {
+                lettersIn2 += 5;
+            }
+            if (hasLeft)
+            {
+                roomName = roomName.Insert(lettersIn2, "_LEFT");
+            }
+            roomName = roomName.Replace("(Clone)", "");
+            return roomName;
+        }
+
+        if (word == "RIGHT") {
+            int lettersIn3 = 0;
+            if (hasUp)
+            {
+                lettersIn3 += 3;
+            }
+            if (hasDown)
+            {
+                lettersIn3 += 5;
+            }
+            if (hasLeft)
+            {
+                lettersIn3 += 5;
+            }
+            if (hasLeft)
+            {
+                roomName = roomName.Insert(lettersIn3, "_RIGHT");
+            }
+            roomName = roomName.Replace("(Clone)", "");
+            return roomName;
+
+        }
+        
+        return "";
+    }
+
+    private string RemoveWord(string word, int arrayPos)
+    {
+
+        string roomName = mapManager.roomName[arrayPos];
+
+
+        if (word == "UP")
+        {
+            roomName = roomName.Replace("_UP", "");
+            roomName = roomName.Replace("(Clone)", "");
+            return roomName;
+        }
+
+        if (word == "DOWN")
+        {
+            roomName = roomName.Replace("_DOWN", "");
+            roomName = roomName.Replace("(Clone)", "");
+            return roomName;
+        }
+
+        if (word == "LEFT")
+        {
+            roomName = roomName.Replace("_LEFT", "");
+            roomName = roomName.Replace("(Clone)", "");
+            return roomName;
+        }
+
+        if (word == "RIGHT")
+        {
+            roomName = roomName.Replace("_RIGHT", "");
+            roomName = roomName.Replace("(Clone)", "");
+            return roomName;
+
+        }
+        return "";
+    }
+
+    private void CloseDoors(int arrayNum)
+    {
+        bool[] shutDoorsHere = DoorsUnoccupied(arrayNum);
+        string roomName = "";
+
+        if (shutDoorsHere[0] != false && shutDoorsHere[1] != false && shutDoorsHere[2] != false && shutDoorsHere[3] != false)
+        {
+
+        }
+        else
+        {
+            if (shutDoorsHere[0] == true)
+            {
+                roomName = mapManager.roomName[arrayNum];
+                roomName = roomName.Replace("_UP", "");
+            }
+            if (shutDoorsHere[1] == true)
+            {
+                roomName = mapManager.roomName[arrayNum];
+                roomName = roomName.Replace("_DOWN", "");
+            }
+            if (shutDoorsHere[2] == true)
+            {
+                roomName = mapManager.roomName[arrayNum];
+                roomName = roomName.Replace("_LEFT", "");
+            }
+            if (shutDoorsHere[3] == true)
+            {
+                roomName = mapManager.roomName[arrayNum];
+                roomName = roomName.Replace("_RIGHT", "");
+            }
+
+            roomName = roomName.Replace("(Clone)", "");
+
+            for (int i = 0; i < allRooms.Length; i++)
+            {
+                if (allRooms[i].name == roomName)
+                {
+                    Destroy(mapManager.roomManager[arrayNum]);
+                    GameObject newRoom = Instantiate(allRooms[i], mapManager.roomPosition[arrayNum], Quaternion.identity);
+                    mapManager.UpdateVariables(arrayNum, newRoom);
+                }
+            }
+        }
+    }
+
+
     //0 = room has an up door and it is not occupied
     //1 = room has an down door and it is not occupied
     //2 = room has an left door and it is not occupied
@@ -606,7 +1011,6 @@ public class MapGeneration : MonoBehaviour
                     roomName = "_UP" + roomName;
                 }
                 roomName = roomName.Replace("(Clone)", "");
-                print(roomName);
                 for (int i = 0; i < m_downDoors.Length; i++)
                 {
                     if (m_downDoors[i].name == roomName)
@@ -629,7 +1033,6 @@ public class MapGeneration : MonoBehaviour
                     roomName = roomName.Insert(lettersIn1, "_DOWN");
                 }
                 roomName = roomName.Replace("(Clone)", "");
-                print(roomName);
                 for (int i = 0; i < m_upDoors.Length; i++)
                 {
                     if (m_upDoors[i].name == roomName)
@@ -656,7 +1059,6 @@ public class MapGeneration : MonoBehaviour
                     roomName = roomName.Insert(lettersIn2, "_LEFT");
                 }
                 roomName = roomName.Replace("(Clone)", "");
-                print(roomName);
                 for (int i = 0; i < m_rightDoors.Length; i++)
                 {
                     if (m_rightDoors[i].name == roomName)
@@ -688,7 +1090,6 @@ public class MapGeneration : MonoBehaviour
                     roomName = roomName.Insert(lettersIn3, "_RIGHT");
                 }
                 roomName = roomName.Replace("(Clone)", "");
-                print(roomName);
                 for (int i = 0; i < m_leftDoors.Length; i++)
                 {
                     if (m_leftDoors[i].name == roomName)
