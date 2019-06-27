@@ -7,13 +7,14 @@ public class Tofu : Melee
 
     [Header("Tofu Specific Variables")]
     public float attackDamage;
-    public float attackSpeed;
+    public float tofuAttackSpeed;
     public float moveSpeed;
 
     // Start is called before the first frame update
     void Start()
     {
         MeleeStart();
+        attackSpeed = tofuAttackSpeed;
         pm.speed = moveSpeed;
     }
 
@@ -21,6 +22,14 @@ public class Tofu : Melee
     void Update()
     {
         MeleeUpdate();
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject.tag == "")
+        {
+
+        }
     }
 
 }

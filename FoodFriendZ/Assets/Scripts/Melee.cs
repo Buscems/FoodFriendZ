@@ -17,8 +17,18 @@ public class Melee : MonoBehaviour
     [Header("Attack Variables")]
     public GameObject sword;
     public bool attacking;
+    bool swordStart;
+    Vector3 swordStartPos;
     public Vector3 direction;
     public float offset;
+    public float attackDuration;
+    private float attackTimer;
+    //these are for the rotation of the sword
+    public float Radius;
+    private Vector2 _centre;
+    private float _angle;
+    [HideInInspector]
+    public float attackSpeed;
 
     [Header("Script References")]
     [Tooltip("This is the reference for the main character controller that controls movement")]
@@ -30,6 +40,7 @@ public class Melee : MonoBehaviour
         myPlayer = ReInput.players.GetPlayer(playerNum - 1);
         ReInput.ControllerConnectedEvent += OnControllerConnected;
         CheckController(myPlayer);
+
     }
 
     // Start is called before the first frame update
@@ -39,7 +50,6 @@ public class Melee : MonoBehaviour
         pm = this.GetComponent<PlayerMovement>();
         Debug.Log("Yer");
         sword.SetActive(false);
-
     }
 
     // Update is called once per frame
@@ -47,23 +57,47 @@ public class Melee : MonoBehaviour
     {
 
         //keeping track of the direction of the player
-        this.direction = pm.velocity;
+        this.direction = pm.velocity / pm.speed;
 
         //melee attack
         if (myPlayer.GetButtonDown("Attack") && !attacking)
         {
-            
+            Attack();
         }
 
-        
+        if (attacking)
+        {
 
+            if (!swordStart)
+            {
+                _angle = 0;
+                attackTimer = attackDuration;
+                swordStart = true;
+            }
+
+            _centre = transform.position;
+
+            _angle += attackSpeed * Time.deltaTime;
+
+            var newOffset = new Vector2(Mathf.Sin(_angle), Mathf.Cos(_angle)) * Radius;
+            sword.transform.position = _centre + newOffset;
+            attackTimer -= Time.deltaTime;
+            if(attackTimer <= 0)
+            {
+                EndAttack();
+            }
+        }
+
+        if (!attacking)
+        {
+            swordStart = false;
+        }
 
     }
     void Attack()
     {
         attacking = true;
-        //this will have the sword spawn where the player is facing + a certain distance away
-        sword.transform.position = this.transform.position + direction * offset;
+        sword.SetActive(true);
     }
 
     void EndAttack()
