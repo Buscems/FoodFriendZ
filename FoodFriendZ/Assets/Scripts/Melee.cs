@@ -48,7 +48,6 @@ public class Melee : MonoBehaviour
     {
 
         pm = this.GetComponent<PlayerMovement>();
-        Debug.Log("Yer");
         sword.SetActive(false);
     }
 
