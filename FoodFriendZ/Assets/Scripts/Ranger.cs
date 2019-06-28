@@ -45,8 +45,15 @@ public class Ranger : MonoBehaviour
             direction = new Vector3(myPlayer.GetAxisRaw("AimHorizontal"), myPlayer.GetAxisRaw("AimVertical"));
         }
 
+        //this will recognize if the current food is the type where you can hold down the trigger, you have to keep clicking, or if it shoots bursts of rounds and how many in each burst
         switch (projectileType) {
             case type.fullAuto:
+
+                break;
+            case type.semiAuto:
+
+                break;
+            case type.burst:
 
                 break;
         }
