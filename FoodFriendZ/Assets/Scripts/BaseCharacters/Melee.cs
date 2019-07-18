@@ -16,6 +16,8 @@ public class Melee : MonoBehaviour
 
     [Header("Attack Variables")]
     public GameObject sword;
+    [HideInInspector]
+    public Animator swordAnim;
     public bool attacking;
     public Vector3 direction;
     public float offset;
@@ -37,7 +39,7 @@ public class Melee : MonoBehaviour
     {
 
         pm = this.GetComponent<PlayerMovement>();
-        Debug.Log("Yer");
+        swordAnim = sword.GetComponent<Animator>();
         sword.SetActive(false);
 
     }
@@ -52,27 +54,26 @@ public class Melee : MonoBehaviour
         //melee attack
         if (myPlayer.GetButtonDown("Attack") && !attacking)
         {
-            
+            sword.SetActive(true);
         }
 
-        
-
-
     }
-    void Attack()
+    //These functions are placements that have been moved to the MeleeAttack script
+    /*
+    public void Attack()
     {
         attacking = true;
         //this will have the sword spawn where the player is facing + a certain distance away
         sword.transform.position = this.transform.position + direction * offset;
     }
 
-    void EndAttack()
+    public void EndAttack()
     {
-        
         sword.SetActive(false);
         attacking = false;
 
     }
+    */
 
     void OnControllerConnected(ControllerStatusChangedEventArgs arg)
     {

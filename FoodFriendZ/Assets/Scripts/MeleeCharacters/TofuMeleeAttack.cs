@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BasePlayerMovement : MonoBehaviour
+public class TofuMeleeAttack : MeleeAttack
 {
     // Start is called before the first frame update
     void Start()
@@ -14,5 +14,10 @@ public class BasePlayerMovement : MonoBehaviour
     void Update()
     {
         
+    }
+    new private void OnTriggerEnter2D(Collider2D collision)
+    {
+        //this is where you would any extra effects such as making the enemy slowed or burned and what not
+
     }
 }
