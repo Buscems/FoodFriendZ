@@ -1,91 +1,107 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-    /*NOTES
-     * this is really broken
-     * nothing works
-     * dont try it
-     * i broke everything
-     */
+
 public class PowerUps : MonoBehaviour
 {
-    public float playerSpeed, originalSpeed;
-    public Rigidbody2D playerRb;
-    public int playerId;
-    public float internalTimer, itemTimer, maxTimer;
-    //public GameObject projectile;
-    public Vector2 velocity;
-
-    public bool activeItem;
-
-    //public Vector2 spawnPoint;
-    
-    // Start is called before the first frame update
-    void Start()
+    //holds the type of powerUps that I can set
+    public enum PowerUpTypes
     {
-        internalTimer = Time.timeScale;
-        itemTimer = maxTimer;
-        playerSpeed = originalSpeed;
-        //spawnPoint = new Vector2(transform.position.x + 5f, transform.position.y);
+        SlowSpeed,
+        FastSpeed,
+        SlowTime
+
     }
+    //lets me set up the typer of powerUp
+    public PowerUpTypes currentPowerUp;
 
-    // Update is called once per frame
-    void Update()
+    //PowerUp Variables
+    public float multiplier;
+    public float timer = 5f;
+
+    void OnTriggerEnter2D(Collider2D other)
     {
-        //basic movement 
-        velocity.x = Input.GetAxisRaw("Horizontal") * playerSpeed * Time.deltaTime;
 
-        playerRb.MovePosition(playerRb.position + velocity * Time.deltaTime);
-
-        //item Timeout
-        if (activeItem)
-        {
-            itemTimer-= Time.deltaTime;
-        }
-
-        if (itemTimer <= 0)
-        {
-            itemTimer = maxTimer;
-            activeItem = false;
-        }
-    }
-
-    private void OnTriggerStay2D(Collider2D other)
-    {
-        if (activeItem == false) {
-            if (other.gameObject.tag == "SlowSpeed")
+            if (other.CompareTag("Player"))
             {
-                playerSpeed *= .5f;
-                Destroy(other.gameObject);
-                activeItem = true;
-            }
+                StartCoroutine(Pickup(other));
 
-            if (other.gameObject.tag == "SlowTime")
-            {
-                internalTimer = .5f;
-                Destroy(other.gameObject);
-                activeItem = true;
             }
+        
+    }
 
-            if (other.gameObject.tag == "FastSpeed")
-            {
-                playerSpeed *= 1.5f;
-                Destroy(other.gameObject);
-                activeItem = true;
-            }
-        }
-        /*
-        if (other.gameObject.tag == "Projectile")
+   IEnumerator Pickup(Collider2D player)
+   {
+        PlayerStatTemp stats = player.GetComponent<PlayerStatTemp>();
+
+        if (stats.activeItem == false)
         {
-            Instantiate(projectile, spawnPoint, Quaternion.identity);
+            switch (currentPowerUp)
+            {
+                //case 1
+                case PowerUpTypes.FastSpeed:
+
+                    stats.activeItem = true;
+
+                    multiplier = 1.5f;
+                    stats.playerSpeed *= multiplier;
+
+                    GetComponent<SpriteRenderer>().enabled = false;
+                    GetComponent<Collider2D>().enabled = false;
+
+                    yield return new WaitForSeconds(timer);
+
+                    stats.playerSpeed /= multiplier;
+
+                    Destroy(gameObject);
+                    stats.activeItem = false;
+
+                    break;
+
+                //case 2
+                case PowerUpTypes.SlowSpeed:
+
+                    stats.activeItem = true;
+
+                    multiplier = .75f;
+                    stats.playerSpeed *= multiplier;
+
+                    GetComponent<SpriteRenderer>().enabled = false;
+                    GetComponent<Collider2D>().enabled = false;
+
+                    yield return new WaitForSeconds(timer);
+
+                    stats.playerSpeed /= multiplier;
+
+                    Destroy(gameObject);
+                    stats.activeItem = false;
+
+                    break;
+
+                //case 3
+                case PowerUpTypes.SlowTime:
+
+                    stats.activeItem = true;
+
+                    multiplier = .75f;
+                    Time.timeScale *= multiplier;
+
+                    GetComponent<SpriteRenderer>().enabled = false;
+                    GetComponent<Collider2D>().enabled = false;
+
+                    yield return new WaitForSeconds(timer);
+
+                    Time.timeScale /= multiplier;
+
+                    Destroy(gameObject);
+                    stats.activeItem = false;
+
+                    break;
+
+                default:
+                    Debug.Log("Not a Power Up");
+                    break;
+            }
         }
-        */
-    }
-
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        playerSpeed = originalSpeed;
-        internalTimer = 1;
-    }
-
-}
+   }
+}//END OF SCRIPT

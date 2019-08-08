@@ -6,9 +6,6 @@ TagManager:
   tags:
   - GameOverTest
   - TilesHere
-  - SlowSpeed
-  - FastSpeed
-  - SlowTime
   layers:
   - Default
   - TransparentFX
