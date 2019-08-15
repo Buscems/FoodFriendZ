@@ -28,7 +28,7 @@ public class CurrencyManager : MonoBehaviour
         }
         if (isDead == true){
             inGame = false;
-            PlayerPrefs.SetInt("total_money", 0);
+            PlayerPrefs.DeleteAll();
         }
     }
 }

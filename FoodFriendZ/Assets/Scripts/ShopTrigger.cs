@@ -7,7 +7,8 @@ public class ShopTrigger : MonoBehaviour
 {
 
     public GameObject uiObject;
-    public GameObject uiText;
+    public GameObject ableToBuyText;
+    public GameObject ableToExitText;
     public GameObject shopMenu;
     public bool canShop;
     public bool isShopping;
@@ -15,7 +16,8 @@ public class ShopTrigger : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        uiText.SetActive(false);
+        ableToBuyText.SetActive(false);
+        ableToExitText.SetActive(false);
         canShop = false;
         isShopping = false;
         shopMenu.SetActive(false);
@@ -37,6 +39,8 @@ public class ShopTrigger : MonoBehaviour
                     isShopping = true;
                     Time.timeScale = 0f;
                     shopMenu.SetActive(true);
+                    ableToBuyText.SetActive(false);
+                    ableToExitText.SetActive(true);
                 }
             }
         }
@@ -46,19 +50,21 @@ public class ShopTrigger : MonoBehaviour
         isShopping = false;
         Time.timeScale = 1f;
         shopMenu.SetActive(false);
+        ableToBuyText.SetActive(true);
+        ableToExitText.SetActive(false);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Player")
         {
-            uiText.SetActive(true);
+            ableToBuyText.SetActive(true);
             canShop = true;
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        uiText.SetActive(false);
+        ableToBuyText.SetActive(false);
         canShop = false;
     }
 }
