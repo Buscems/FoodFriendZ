@@ -14,6 +14,8 @@ public class MainPlayer : MonoBehaviour
     [Tooltip("Number identifier for each player, must be above 0")]
     public int playerNum;
 
+    Vector3 direction;
+
     public BasePlayer currentChar;
 
     float speed;
