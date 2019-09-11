@@ -6,6 +6,10 @@ using UnityEngine;
 public class BasePlayer : ScriptableObject
 {
     public float speed;
+    public float attackDamage;
+    [Tooltip("This is going to be the size of the weapon, z is always 1.")]
+    public Vector3 attackSize;
+
     [HideInInspector]
     public Vector3 currentPosition;
     public Vector3 currentDirection;
@@ -17,8 +21,6 @@ public class BasePlayer : ScriptableObject
     public GameObject weapon;
     [Tooltip("This is the position the weapon will be at when it is not being used.")]
     public Vector3 awayPos;
-    [Tooltip("This is going to be the size of the weapon, z is always 1.")]
-    public Vector3 attackSize;
     [Tooltip("This will be how far the weapon is from the player when it is activated.")]
     public float offset;
     [Tooltip("This will be how fast the sword attack plays")]
@@ -30,6 +32,7 @@ public class BasePlayer : ScriptableObject
 
     [Header("Ranged Characters")]
     public GameObject bullet;
+    public float firerate;
 
     [Header("Building Characters")]
     public GameObject drop;

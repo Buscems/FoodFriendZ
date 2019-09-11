@@ -107,4 +107,20 @@ public class MainPlayer : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.gameObject.tag == "StatBoost")
+        {
+            BasePowerUp temp = other.gameObject.GetComponent<BasePowerUp>();
+
+            currentChar.speed *= temp.movementSpeed;
+            currentChar.attackSize *= temp.attackSize;
+            currentChar.attackSpeed *= temp.attackSpeed; //for melee
+            currentChar.firerate *= temp.attackSpeed; //for projectiles
+            currentChar.attackDamage *= temp.attackDamage;
+
+            Destroy(other.gameObject);
+        }
+    }
+
 }
