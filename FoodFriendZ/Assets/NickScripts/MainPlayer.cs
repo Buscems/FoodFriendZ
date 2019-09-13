@@ -67,7 +67,7 @@ public class MainPlayer : MonoBehaviour
     private void FixedUpdate()
     {
 
-        rb.MovePosition(transform.position + velocity * Time.deltaTime);
+        rb.MovePosition(transform.position + (velocity * speed) * Time.deltaTime);
 
     }
 
