@@ -16,30 +16,54 @@ public class BaseEnemy : ScriptableObject
 
     float aggroTimer;
 
-    Vector3 currentPos;
+    [HideInInspector]
+    public Vector3 currentPos;
 
     bool aggro;
 
-    Transform target;
+    [Tooltip("This will be for how many players are in the game just in case we think about doing multiplayer")]
+    public Transform[] target;
+    Transform currentTarget;
 
     // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
-
+        target[0] = GameObject.FindGameObjectWithTag("Player1").transform;
     }
 
     // Update is called once per frame
-    void Update()
+    public void Update()
     {
 
+        if (currentTarget != null)
+        {
+           // Debug.Log(currentTarget.gameObject.name);
+        }
 
-
-
+        //Debug.Log((target[0].transform.position - currentPos).magnitude);
 
     }
 
-    void Aggro()
+    public void Aggro()
     {
+
+        for (int i = 0; i < target.Length; i++)
+        {
+
+            if ((target[i].transform.position - currentPos).magnitude < aggroRange && !aggro)
+            {
+                aggro = true;
+                currentTarget = target[i];
+                aggroTimer = aggroTimerMax;
+            }
+            else
+            {
+                if (aggro)
+                {
+                    aggroTimer -= Time.deltaTime;
+                }
+            }
+        }
 
         if (aggro)
         {
@@ -48,21 +72,9 @@ public class BaseEnemy : ScriptableObject
             {
                 aggroTimer = aggroTimerMax;
                 aggro = false;
+                currentTarget = null;
             }
 
-        }
-
-        if ((target.transform.position - currentPos).magnitude < aggroRange)
-        {
-            aggro = true;
-            aggroTimer = aggroTimerMax;
-        }
-        else
-        {
-            if (aggro)
-            {
-                aggroTimer -= Time.deltaTime;
-            }
         }
 
     }
@@ -71,7 +83,5 @@ public class BaseEnemy : ScriptableObject
     {
 
     }
-
-    
 
 }

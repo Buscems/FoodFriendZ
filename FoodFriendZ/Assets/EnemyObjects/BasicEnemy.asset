@@ -14,4 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 2
   aggroRange: 3
-  aggroTimerMax: 0
+  aggroTimerMax: 2
+  currentPos: {x: 6, y: 0, z: 0}
+  target:
+  - {fileID: 822394764877458804, guid: 84bc0511b46d0ed41a52cefe75499541, type: 3}

@@ -10,12 +10,17 @@ public class TestEnemy : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        currentEnemy.Start();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
+        currentEnemy.currentPos = this.transform.position;
+
+        currentEnemy.Update();
+        currentEnemy.Aggro();
+
     }
 }
