@@ -18,7 +18,8 @@ public class MainPlayer : MonoBehaviour
 
     public BasePlayer currentChar;
 
-    float speed;
+    [HideInInspector]
+    public float speed;
 
     Rigidbody2D rb;
     Vector3 velocity;
@@ -50,8 +51,8 @@ public class MainPlayer : MonoBehaviour
         speed = currentChar.speed;
         currentChar.currentPosition = this.transform.position;
 
-        velocity.x = myPlayer.GetAxisRaw("MoveHorizontal");
-        velocity.y = myPlayer.GetAxisRaw("MoveVertical");
+        velocity.x = myPlayer.GetAxisRaw("MoveHorizontal") * speed;
+        velocity.y = myPlayer.GetAxisRaw("MoveVertical") * speed;
 
         if(velocity.x != 0)
         {
@@ -67,7 +68,7 @@ public class MainPlayer : MonoBehaviour
     private void FixedUpdate()
     {
 
-        rb.MovePosition(transform.position + (velocity * speed) * Time.deltaTime);
+        rb.MovePosition(transform.position + (velocity ) * Time.deltaTime);
 
     }
 
