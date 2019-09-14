@@ -8,6 +8,7 @@ TagManager:
   - TilesHere
   - Player1
   - PlayerAttack
+  - Enemy
   layers:
   - Default
   - TransparentFX

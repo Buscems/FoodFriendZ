@@ -26,6 +26,9 @@ public class MainPlayer : MonoBehaviour
     Rigidbody2D rb;
     Vector3 velocity;
 
+    private CameraShake cam;
+
+
     private void Awake()
     {
 
@@ -33,7 +36,7 @@ public class MainPlayer : MonoBehaviour
         myPlayer = ReInput.players.GetPlayer(playerNum - 1);
         ReInput.ControllerConnectedEvent += OnControllerConnected;
         CheckController(myPlayer);
-
+        cam = GameObject.Find("Main Camera").GetComponent<CameraShake>();
     }
 
     // Start is called before the first frame update
@@ -83,6 +86,7 @@ public class MainPlayer : MonoBehaviour
         {
            GameObject attack = Instantiate(currentChar.weapon, transform.position + (attackDirection.transform.right * currentChar.offset), Quaternion.Euler(attackDirection.transform.eulerAngles.x, attackDirection.transform.eulerAngles.y, attackDirection.transform.eulerAngles.z + currentChar.attackRotationalOffset));
             attack.transform.parent = transform;
+            attack.GetComponent<Attack>().damage = currentChar.attackDamage;
         }
     }
 
@@ -91,6 +95,11 @@ public class MainPlayer : MonoBehaviour
 
         rb.MovePosition(transform.position + (velocity * speed) * Time.deltaTime);
 
+    }
+
+    public void HitEnemy()
+    {
+        cam.StartShake();
     }
 
     //these two methods are for ReWired, if any of you guys have any questions about it I can answer them, but you don't need to worry about this for working on the game - Buscemi
