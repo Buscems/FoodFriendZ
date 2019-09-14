@@ -25,6 +25,8 @@ public class BasePlayer : ScriptableObject
     public float offset;
     [Tooltip("This will be how fast the sword attack plays")]
     public float attackSpeed;
+    [Tooltip("This will be how much the sprite should be rotated for the attack animation")]
+    public float attackRotationalOffset;
     //[Tooltip("This is the amount that the sword will spin around the player when attacking.")]
     //public float attackRange;
     [HideInInspector]
@@ -36,6 +38,8 @@ public class BasePlayer : ScriptableObject
 
     [Header("Building Characters")]
     public GameObject drop;
+
+
 
     // Start is called before the first frame update
     public void Start()

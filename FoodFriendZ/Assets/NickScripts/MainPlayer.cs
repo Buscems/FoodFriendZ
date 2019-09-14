@@ -16,6 +16,8 @@ public class MainPlayer : MonoBehaviour
 
     Vector3 direction;
 
+    public Transform attackDirection;
+
     public BasePlayer currentChar;
 
     [HideInInspector]
@@ -51,10 +53,13 @@ public class MainPlayer : MonoBehaviour
         speed = currentChar.speed;
         currentChar.currentPosition = this.transform.position;
 
-        velocity.x = myPlayer.GetAxisRaw("MoveHorizontal") * speed;
-        velocity.y = myPlayer.GetAxisRaw("MoveVertical") * speed;
+        velocity.x = myPlayer.GetAxisRaw("MoveHorizontal");
+        velocity.y = myPlayer.GetAxisRaw("MoveVertical");
 
-        if(velocity.x != 0)
+        direction.x = myPlayer.GetAxisRaw("DirectionHorizontal");
+        direction.y = myPlayer.GetAxisRaw("DirectionVertical");
+
+        if (velocity.x != 0)
         {
             currentChar.currentDirection.x = velocity.x;
         }
@@ -63,12 +68,28 @@ public class MainPlayer : MonoBehaviour
             currentChar.currentDirection.y = velocity.y;
         }
 
+        if (direction.y != 0)
+        {
+            attackDirection.transform.right = direction;
+        }
+
+        if (direction.x != 0)
+        {
+            attackDirection.transform.right = direction;
+        }
+
+
+        if (myPlayer.GetButtonDown("Attack"))
+        {
+           GameObject attack = Instantiate(currentChar.weapon, transform.position + (attackDirection.transform.right * currentChar.offset), Quaternion.Euler(attackDirection.transform.eulerAngles.x, attackDirection.transform.eulerAngles.y, attackDirection.transform.eulerAngles.z + currentChar.attackRotationalOffset));
+            attack.transform.parent = transform;
+        }
     }
 
     private void FixedUpdate()
     {
 
-        rb.MovePosition(transform.position + (velocity ) * Time.deltaTime);
+        rb.MovePosition(transform.position + (velocity * speed) * Time.deltaTime);
 
     }
 
