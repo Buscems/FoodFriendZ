@@ -6,6 +6,7 @@ using Rewired.ControllerExtensions;
 
 public class MainPlayer : MonoBehaviour
 {
+    public int health;
 
     //the following is in order to use rewired
     [Tooltip("Reference for using rewired")]
@@ -51,7 +52,19 @@ public class MainPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        PlayerMovement();
+        LookDirection();
+        Attack();
+    }
 
+
+    private void FixedUpdate()
+    {
+        rb.MovePosition(transform.position + (velocity * speed) * Time.deltaTime);
+    }
+
+    private void PlayerMovement()
+    {
         currentChar.Update();
         speed = currentChar.speed;
         currentChar.currentPosition = this.transform.position;
@@ -70,7 +83,10 @@ public class MainPlayer : MonoBehaviour
         {
             currentChar.currentDirection.y = velocity.y;
         }
+    }
 
+    private void LookDirection()
+    {
         if (direction.y != 0)
         {
             attackDirection.transform.right = direction;
@@ -80,26 +96,35 @@ public class MainPlayer : MonoBehaviour
         {
             attackDirection.transform.right = direction;
         }
-
-
+    }
+    
+    private void Attack()
+    {
         if (myPlayer.GetButtonDown("Attack"))
         {
-           GameObject attack = Instantiate(currentChar.weapon, transform.position + (attackDirection.transform.right * currentChar.offset), Quaternion.Euler(attackDirection.transform.eulerAngles.x, attackDirection.transform.eulerAngles.y, attackDirection.transform.eulerAngles.z + currentChar.attackRotationalOffset));
+            GameObject attack = Instantiate(currentChar.weapon, transform.position + (attackDirection.transform.right * currentChar.offset), Quaternion.Euler(attackDirection.transform.eulerAngles.x, attackDirection.transform.eulerAngles.y, attackDirection.transform.eulerAngles.z + currentChar.attackRotationalOffset));
             attack.transform.parent = transform;
             attack.GetComponent<Attack>().damage = currentChar.attackDamage;
         }
-    }
 
-    private void FixedUpdate()
-    {
-
-        rb.MovePosition(transform.position + (velocity * speed) * Time.deltaTime);
-
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            health--;
+        }
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            health++;
+        }
     }
 
     public void HitEnemy()
     {
         cam.StartShake();
+    }
+
+    public void GetHit(int damage)
+    {
+        health -= damage;
     }
 
     //these two methods are for ReWired, if any of you guys have any questions about it I can answer them, but you don't need to worry about this for working on the game - Buscemi
