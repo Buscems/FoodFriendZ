@@ -9,6 +9,7 @@ TagManager:
   - Player1
   - PlayerAttack
   - Enemy
+  - StatBoost
   layers:
   - Default
   - TransparentFX
