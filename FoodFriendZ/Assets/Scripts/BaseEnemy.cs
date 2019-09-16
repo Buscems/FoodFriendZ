@@ -38,7 +38,7 @@ public class BaseEnemy : ScriptableObject
 
     }
 
-    void Aggro()
+    public void Aggro()
     {
 
         if (aggro)
@@ -67,11 +67,7 @@ public class BaseEnemy : ScriptableObject
 
     }
 
-    void Movement()
-    {
+    void Movement(){
 
     }
-
-    
-
 }

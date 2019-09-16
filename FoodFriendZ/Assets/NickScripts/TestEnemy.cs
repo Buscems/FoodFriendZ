@@ -16,6 +16,6 @@ public class TestEnemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        currentEnemy.Aggro();
     }
 }
