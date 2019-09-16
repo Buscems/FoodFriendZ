@@ -247,7 +247,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &519420033
 MonoBehaviour:
@@ -313,6 +313,36 @@ Transform:
   m_Children:
   - {fileID: 2265542972100103431}
   m_Father: {fileID: 1499699919}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &947664673
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 6731875822278274060}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 947664674}
+  m_Layer: 0
+  m_Name: knightIMPACTeffect (3) (Missing Prefab)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &947664674
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 6731875822278274060}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 947664673}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &950993391
@@ -393,7 +423,7 @@ Transform:
   m_LocalScale: {x: 1, y: 10, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &950993394
 BoxCollider2D:
@@ -499,7 +529,7 @@ Transform:
   m_LocalScale: {x: 1, y: 10, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &1021384466
 BoxCollider2D:
@@ -527,6 +557,31 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!1 &1208179058 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 822394764877458807, guid: 84bc0511b46d0ed41a52cefe75499541,
+    type: 3}
+  m_PrefabInstance: {fileID: 822394764366944431}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1208179059
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1208179058}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 6de8e385975dba642be1ae9d7cef2f0e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1246814540
 GameObject:
   m_ObjectHideFlags: 0
@@ -658,7 +713,7 @@ Transform:
   m_LocalScale: {x: 20, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &1343684719
 BoxCollider2D:
@@ -928,7 +983,7 @@ Transform:
   m_Children:
   - {fileID: 924877235}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &1499699920
 Rigidbody2D:
@@ -1103,7 +1158,7 @@ Transform:
   m_LocalScale: {x: 20, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &1715885951
 BoxCollider2D:
@@ -1260,7 +1315,7 @@ PrefabInstance:
     - target: {fileID: 822394764877458804, guid: 84bc0511b46d0ed41a52cefe75499541,
         type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 822394764877458804, guid: 84bc0511b46d0ed41a52cefe75499541,
         type: 3}
@@ -1296,8 +1351,18 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 5c14578a08a25b643bcb472ab70d1c23,
+      objectReference: {fileID: 8072250368288326826, guid: 20e13519dda565a4580b94c26c01d5e9,
         type: 3}
+    - target: {fileID: 822394764877458805, guid: 84bc0511b46d0ed41a52cefe75499541,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 0.32
+      objectReference: {fileID: 0}
+    - target: {fileID: 822394764877458805, guid: 84bc0511b46d0ed41a52cefe75499541,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 0.32
+      objectReference: {fileID: 0}
     - target: {fileID: 822394764877458806, guid: 84bc0511b46d0ed41a52cefe75499541,
         type: 3}
       propertyPath: attackDirection
@@ -1463,7 +1528,7 @@ PrefabInstance:
     - target: {fileID: 3692210359826558997, guid: d8b539f3c055f2b42b4756df05b23688,
         type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 3692210359826558997, guid: d8b539f3c055f2b42b4756df05b23688,
         type: 3}
